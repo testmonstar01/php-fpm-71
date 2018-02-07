@@ -3,6 +3,9 @@ set -e
 
 echo "Starting laravel deployment"
 
+chown -R www-data:www-data /var/www/html
+chown -R www-data:www-data /home/composer
+
 # Migrate database.
 su -c "/var/www/html/artisan down" -s /bin/sh www-data
 su -c "/var/www/html/artisan storage:link" -s /bin/sh www-data
@@ -11,5 +14,5 @@ su -c "/var/www/html/artisan optimize" -s /bin/sh www-data
 su -c "/var/www/html/artisan up" -s /bin/sh www-data
 
 echo "Correcting permissions"
-chown -R www-data:www-data /src
-chmod -R 0777 /src
+chown -R www-data:www-data /var/www/html
+chmod -R 0777 /var/www/html
