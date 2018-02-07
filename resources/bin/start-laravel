@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+echo "Starting laravel deployment"
+
+# Migrate database.
+su -c "/var/www/html/artisan down" -s /bin/sh www-data
+su -c "/var/www/html/artisan storage:link" -s /bin/sh www-data
+su -c "/var/www/html/artisan migrate --force" -s /bin/sh www-data
+su -c "/var/www/html/artisan optimize" -s /bin/sh www-data
+su -c "/var/www/html/artisan up" -s /bin/sh www-data
+
+echo "Correcting permissions"
+chown -R www-data:www-data /src
+chmod -R 0777 /src
